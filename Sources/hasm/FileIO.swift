@@ -11,11 +11,11 @@ import RegexBuilder
 struct InputFile {
     private let contents: Data
     
-    init?(path: String) {
+    init(path: String) throws {
         let contents = FileManager.default.contents(atPath: path)
         
         guard let contents else {
-            return nil
+            throw Error.notFound
         }
         
         self.contents = contents
@@ -28,10 +28,9 @@ struct InputFile {
         )
         
         guard let sourceCode else {
-            throw Error.notFound
+            throw Error.notAscii
         }
         
-        // TODO: Understand how substrings behave
         return sourceCode
             .split(separator: "\n")
             .map(String.init)
@@ -65,5 +64,6 @@ struct InputFile {
 extension InputFile {
     enum Error: Swift.Error {
         case notFound
+        case notAscii
     }
 }
