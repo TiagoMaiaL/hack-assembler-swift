@@ -25,6 +25,9 @@ let package = Package(
                     name: "ArgumentParser",
                     package: "swift-argument-parser"
                 )
+            ],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
             ]
         ),
         .testTarget(
