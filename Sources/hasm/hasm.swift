@@ -14,5 +14,8 @@ struct Hasm: ParsableCommand {
         let inputFile = try InputFile(path: asmFilePath)
         let asmLines = try inputFile.lines()
         print(asmLines)
+        
+        // TODO: parse and collect symbols
+        // TODO: parse and translate instructions
     }
 }
