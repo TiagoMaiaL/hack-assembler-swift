@@ -38,7 +38,7 @@ struct InputFile {
             .map { string in
                 string
                     .filter { (ch: Character) in
-                        ch.isWhitespace || ch.isNewline
+                        !(ch.isWhitespace && ch.isNewline)
                     }
             }
             .map { string in

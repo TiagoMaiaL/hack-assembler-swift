@@ -19,7 +19,13 @@ let package = Package(
     ],
     targets: [
         .executableTarget(
-            name: "hasm"
+            name: "hasm",
+            dependencies: [
+                .product(
+                    name: "ArgumentParser",
+                    package: "swift-argument-parser"
+                )
+            ]
         ),
         .testTarget(
             name: "hasm-tests",
