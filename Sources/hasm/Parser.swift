@@ -12,8 +12,7 @@ struct Parser {
     
     private func parse(_ line: String) throws -> Instruction {
         guard let char = line.first else {
-            // TODO: Define and throw error
-            fatalError()
+            throw Error.invalid(line: line)
         }
         
         switch char {
@@ -30,8 +29,7 @@ struct Parser {
     
     private func parseAddress(_ line: String) throws -> Instruction {
         guard line.count >= 2 else { // Accounts for @ sign
-            // TODO: Define and throw error
-            fatalError()
+            throw Error.invalid(address: line)
         }
         
         let val = String(line[line.startIndex...])
@@ -57,8 +55,7 @@ struct Parser {
             jump = String(line[semicolonIndex...])
             
         } else {
-            // TODO: Define and throw an error
-            fatalError()
+            throw Error.invalid(cInstruction: line)
         }
         
         try validate(function: function)
@@ -74,8 +71,7 @@ struct Parser {
     
     private func parseSymbol(_ line: String) throws -> Instruction {
         guard line[line.startIndex] == "(" && line[line.endIndex] == ")" else {
-            // TODO: define and throw error
-            fatalError()
+            throw Error.invalid(symbol: line)
         }
         
         var symbol = line
@@ -94,8 +90,7 @@ extension Parser {
     private func validate(addressOrVariable: String) throws {
         guard addressOrVariable.isValidAddress ||
               addressOrVariable.isValidSymbol else {
-             // TODO: Define and throw error
-            fatalError()
+            throw Error.invalid(address: addressOrVariable)
         }
     }
     
@@ -108,7 +103,7 @@ extension Parser {
         case "AD": break
         case "MD": break
         case "ADM": break
-        default: fatalError() // TODO: Define and throw an error
+        default: throw Error.invalid(destination: destination)
         }
     }
     
@@ -121,7 +116,7 @@ extension Parser {
         case "JNE": break
         case "JLE": break
         case "JMP": break
-        default: fatalError() // TODO: Define and throw an error
+        default: throw Error.invalid(jump: jump)
         }
     }
     
@@ -155,14 +150,13 @@ extension Parser {
         case "M-D": break
         case "D&M": break
         case "D|M": break
-        default: fatalError() // TODO: Define and throw an error
+        default: throw Error.invalid(function: function)
         }
     }
     
     private func validate(symbol: String) throws {
         guard symbol.isValidSymbol else {
-            // TODO: Define and throw error
-            fatalError()
+            throw Error.invalid(symbol: symbol)
         }
     }
 }
@@ -180,5 +174,17 @@ private extension String {
     
     var isValidAddress: Bool {
         allSatisfy(\.isNumber)
+    }
+}
+
+extension Parser {
+    enum Error: Swift.Error {
+        case invalid(line: String)
+        case invalid(address: String)
+        case invalid(cInstruction: String)
+        case invalid(destination: String)
+        case invalid(function: String)
+        case invalid(jump: String)
+        case invalid(symbol: String)
     }
 }
