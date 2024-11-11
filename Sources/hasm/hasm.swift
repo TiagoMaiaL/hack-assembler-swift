@@ -1,6 +1,4 @@
 
-// TODO: Add the lexing module
-// TODO: Add the parsing module
 // TODO: Add the translator module
 
 import ArgumentParser
