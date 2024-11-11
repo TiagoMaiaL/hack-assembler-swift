@@ -106,4 +106,30 @@ struct ParserTests {
         #expect(cInstruction?.destination == fields[0])
         #expect(cInstruction?.function == fields[1])
     }
+    
+    @Test(
+        arguments: [
+            ["1;JMP"],
+            ["-1;JMP"],
+            ["D+M;JGT"],
+            ["D;JLT"],
+            ["M;JEQ"],
+            ["D-M;JLE"],
+            ["M;JNE"],
+            ["A;JGE"],
+        ]
+    )
+    func testParsingValidJumpComputations(lines: [String]) throws {
+        let expectedComputation = lines[0]
+        let fields = expectedComputation.split(separator: ";").map(String.init)
+        let parser = Parser()
+
+        let instructions = try parser.instructions(from: lines)
+        
+        #expect(!instructions.isEmpty)
+        #expect(instructions.first is Instructions.Computation)
+        let cInstruction = instructions.first as? Instructions.Computation
+        #expect(cInstruction?.function == fields[0])
+        #expect(cInstruction?.jump == fields[1])
+    }
 }
