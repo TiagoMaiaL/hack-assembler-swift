@@ -47,13 +47,15 @@ struct Parser {
         
         if let equalsIndex = line.firstIndex(of: "=") {
             destination = String(line[..<equalsIndex])
-            function = String(line[equalsIndex...])
+            let functionStartIndex = line.index(after: equalsIndex)
+            function = String(line[functionStartIndex...])
             jump = nil
 
         } else if let semicolonIndex = line.firstIndex(of: ";") {
             destination = nil
             function = String(line[..<semicolonIndex])
-            jump = String(line[semicolonIndex...])
+            let jumpStartIndex = line.index(after: semicolonIndex)
+            jump = String(line[jumpStartIndex...])
             
         } else {
             throw Error.invalid(cInstruction: line)
@@ -103,7 +105,7 @@ extension Parser {
         case "AM": break
         case "AD": break
         case "MD": break
-        case "ADM": break
+        case "AMD": break
         default: throw Error.invalid(destination: destination)
         }
     }

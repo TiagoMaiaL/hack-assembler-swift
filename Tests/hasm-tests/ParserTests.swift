@@ -78,4 +78,32 @@ struct ParserTests {
         let aInstruction = instructions.first as? Instructions.Address
         #expect(aInstruction?.val == expectedVar)
     }
+    
+    @Test(
+        arguments: [
+            ["A=A+1"],
+            ["D=1"],
+            ["AM=0"],
+            ["M=-1"],
+            ["M=D+M"],
+            ["AMD=0"],
+            ["D=D+M"],
+            ["M=D+A"],
+            ["M=D-A"],
+            ["M=A-D"],
+        ]
+    )
+    func testParsingValidAssignComputations(lines: [String]) throws {
+        let expectedComputation = lines[0]
+        let fields = expectedComputation.split(separator: "=").map(String.init)
+        let parser = Parser()
+
+        let instructions = try parser.instructions(from: lines)
+        
+        #expect(!instructions.isEmpty)
+        #expect(instructions.first is Instructions.Computation)
+        let cInstruction = instructions.first as? Instructions.Computation
+        #expect(cInstruction?.destination == fields[0])
+        #expect(cInstruction?.function == fields[1])
+    }
 }
