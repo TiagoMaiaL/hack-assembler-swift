@@ -32,7 +32,8 @@ struct Parser {
             throw Error.invalid(address: line)
         }
         
-        let val = String(line[line.startIndex...])
+        let valStartIndex = line.index(after: line.startIndex)
+        let val = String(line[valStartIndex...])
         try validate(addressOrVariable: val)
         return Instructions.Address(
             val: val

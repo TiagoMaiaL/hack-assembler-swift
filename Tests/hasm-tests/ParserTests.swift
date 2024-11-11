@@ -39,4 +39,43 @@ struct ParserTests {
         }
     }
 
+    @Test(
+        arguments: [
+            ["@1"],
+            ["@1123312"],
+            ["@0"],
+            ["@21"],
+            ["@7"],
+        ]
+    )
+    func testParsingValidAddresses(lines: [String]) throws {
+        var expectedValue = lines[0]; expectedValue.removeFirst()
+        let parser = Parser()
+
+        let instructions = try parser.instructions(from: lines)
+        
+        #expect(!instructions.isEmpty)
+        #expect(instructions.first is Instructions.Address)
+        let aInstruction = instructions.first as? Instructions.Address
+        #expect(aInstruction?.val == expectedValue)
+    }
+    
+    @Test(
+        arguments: [
+            ["@test"],
+            ["@test$if"],
+            ["@some_obj_test$if"],
+        ]
+    )
+    func testParsingValidVariables(lines: [String]) throws {
+        var expectedVar = lines[0]; expectedVar.removeFirst()
+        let parser = Parser()
+
+        let instructions = try parser.instructions(from: lines)
+        
+        #expect(!instructions.isEmpty)
+        #expect(instructions.first is Instructions.Address)
+        let aInstruction = instructions.first as? Instructions.Address
+        #expect(aInstruction?.val == expectedVar)
+    }
 }
