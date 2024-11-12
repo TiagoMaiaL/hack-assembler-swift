@@ -46,4 +46,18 @@ struct BinaryTests {
             try aInstruction.binaryRepresentation
         }
     }
+    
+    typealias Computation = Instructions.Computation
+    typealias CompTestArgument = (comp: Computation, bin: String)
+    
+    @Test(
+        arguments: [
+            (Computation(function: "D+1", destination: "M", jump: nil), "1110011111001000"),
+            (Computation(function: "D+M", destination: "M", jump: nil), "1111000010001000"),
+            (Computation(function: "A+1", destination: nil, jump: "JMP"), "1110110111000111"),
+        ]
+    )
+    func testBinaryTranslationOfComputationInstructions(argument: CompTestArgument) throws {
+        #expect(try argument.comp.binaryRepresentation == argument.bin)
+    }
 }
