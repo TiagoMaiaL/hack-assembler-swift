@@ -9,6 +9,8 @@ import Testing
 @testable import hasm
 
 struct ParserTests {
+    let parser = Parser()
+    
     @Test(
         arguments: [
             [""],
@@ -40,7 +42,7 @@ struct ParserTests {
     )
     func testParsing(invalidLines lines: [String]) throws {
         #expect(throws: Parser.Error.self) {
-            _ = try Parser().instructions(from: lines)
+            _ = try parser.instructions(from: lines)
         }
     }
 
@@ -55,7 +57,6 @@ struct ParserTests {
     )
     func testParsingValidAddresses(lines: [String]) throws {
         var expectedValue = lines[0]; expectedValue.removeFirst()
-        let parser = Parser()
 
         let instructions = try parser.instructions(from: lines)
         
@@ -74,7 +75,6 @@ struct ParserTests {
     )
     func testParsingValidVariables(lines: [String]) throws {
         var expectedVar = lines[0]; expectedVar.removeFirst()
-        let parser = Parser()
 
         let instructions = try parser.instructions(from: lines)
         
@@ -101,7 +101,6 @@ struct ParserTests {
     func testParsingValidAssignComputations(lines: [String]) throws {
         let expectedComputation = lines[0]
         let fields = expectedComputation.split(separator: "=").map(String.init)
-        let parser = Parser()
 
         let instructions = try parser.instructions(from: lines)
         
@@ -127,7 +126,6 @@ struct ParserTests {
     func testParsingValidJumpComputations(lines: [String]) throws {
         let expectedComputation = lines[0]
         let fields = expectedComputation.split(separator: ";").map(String.init)
-        let parser = Parser()
 
         let instructions = try parser.instructions(from: lines)
         
@@ -136,5 +134,24 @@ struct ParserTests {
         let cInstruction = instructions.first as? Instructions.Computation
         #expect(cInstruction?.function == fields[0])
         #expect(cInstruction?.jump == fields[1])
+    }
+    
+    @Test(
+        arguments: [
+            ["(name)"],
+            ["(symbol$endif)"],
+            ["(symbol_some_marker)"]
+        ]
+    )
+    func testParsingValidSymbols(lines: [String]) throws {
+        var expectedName = lines[0]
+        expectedName.removeAll { $0 == "(" || $0 == ")" }
+        
+        let instructions = try parser.instructions(from: lines)
+        
+        #expect(!instructions.isEmpty)
+        #expect(instructions.first is Instructions.Symbol)
+        let symbol = instructions.first as? Instructions.Symbol
+        #expect(symbol?.name == expectedName)
     }
 }
