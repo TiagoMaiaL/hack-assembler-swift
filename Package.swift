@@ -3,12 +3,12 @@
 import PackageDescription
 
 let package = Package(
-    name: "hasm",
+    name: "Hasm",
     platforms: [.macOS(.v13)],
     products: [
         .executable(
-            name: "hasm",
-            targets: ["hasm"]
+            name: "Hasm",
+            targets: ["Hasm"]
         ),
     ],
     dependencies: [
@@ -19,7 +19,7 @@ let package = Package(
     ],
     targets: [
         .executableTarget(
-            name: "hasm",
+            name: "Hasm",
             dependencies: [
                 .product(
                     name: "ArgumentParser",
@@ -31,8 +31,8 @@ let package = Package(
             ]
         ),
         .testTarget(
-            name: "hasm-tests",
-            dependencies: ["hasm"]
+            name: "HasmTests",
+            dependencies: ["Hasm"]
         ),
     ]
 )

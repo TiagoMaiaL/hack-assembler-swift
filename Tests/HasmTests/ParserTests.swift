@@ -6,7 +6,7 @@
 //
 
 import Testing
-@testable import hasm
+@testable import Hasm
 
 struct ParserTests {
     let parser = Parser()

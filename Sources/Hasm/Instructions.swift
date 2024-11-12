@@ -5,9 +5,7 @@
 //  Created by Tiago Lopes on 09/11/24.
 //
 
-protocol Instruction {
-    // TODO: Define requirement for binary translation.
-}
+protocol Instruction {}
 
 enum Instructions {
     struct Address: Instruction {
