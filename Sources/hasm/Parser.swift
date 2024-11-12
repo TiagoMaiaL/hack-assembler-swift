@@ -73,13 +73,16 @@ struct Parser {
     }
     
     private func parseSymbol(_ line: String) throws -> Instruction {
-        guard line[line.startIndex] == "(" && line[line.endIndex] == ")" else {
+        guard line.count >= 3, // (, some min identifier, )
+              line[line.startIndex] == "(" &&
+                line[line.index(before: line.endIndex)] == ")"
+        else {
             throw Error.invalid(symbol: line)
         }
         
         var symbol = line
-        symbol.remove(at: line.startIndex)
-        symbol.remove(at: line.endIndex)
+        symbol.remove(at: symbol.startIndex)
+        symbol.remove(at: symbol.index(before: symbol.endIndex))
         
         try validate(symbol: symbol)
         

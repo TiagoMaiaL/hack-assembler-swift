@@ -30,7 +30,12 @@ struct ParserTests {
             ["A;"],
             [";JMP"],
             ["D;qwer"],
-            ["qwer;JMP"]
+            ["qwer;JMP"],
+            ["("],
+            [")"],
+            ["()"],
+            ["(     )"],
+            ["(    \t )"],
         ]
     )
     func testParsing(invalidLines lines: [String]) throws {
