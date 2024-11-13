@@ -10,10 +10,20 @@ struct Hasm: ParsableCommand {
     
     func run() throws {
         let inputFile = try InputFile(path: asmFilePath)
-        let asmLines = try inputFile.lines()
-        print(asmLines)
+        let parser = Parser()
         
         // TODO: parse and collect symbols
-        // TODO: parse and translate instructions
+
+        let binary = try inputFile
+            .lines()
+            .map(parser.parse)
+            .compactMap { $0 as? BinaryRepresentable }
+            .map { try $0.binaryRepresentation }
+            .reduce("") { partialResult, bin in
+                return partialResult + "\n" + bin
+            }
+        
+        print(binary)
+        // TODO: Output to a file
     }
 }

@@ -10,7 +10,7 @@ struct Parser {
         return try lines.map(parse)
     }
     
-    private func parse(_ line: String) throws -> Instruction {
+    func parse(_ line: String) throws -> Instruction {
         guard let char = line.first else {
             throw Error.invalid(line: line)
         }

@@ -32,32 +32,33 @@ struct InputFile {
         }
         
         return sourceCode
-            .split(separator: "\n")
+            .split(separator: .newlineSequence)
             .map(String.init)
-            .map { string in
-                string
-                    .filter { (ch: Character) in
-                        !(ch.isWhitespace && ch.isNewline)
-                    }
-            }
-            .map { string in
-                var string = string
-                let commentPattern = Regex {
-                    Capture {
-                        OneOrMore {
-                            "//"
-                        }
-                        ZeroOrMore(.anyNonNewline)
-                    }
-                }
-                
-                if let match = string.firstMatch(of: commentPattern) {
-                    string.removeSubrange(match.range)
-                }
-                
-                return string
-            }
+            .map(removingWhitespaces)
+            .map(removingComments)
             .filter { !$0.isEmpty }
+    }
+    
+    private func removingWhitespaces(from line: String) -> String {
+        line.filter { !($0.isWhitespace && $0.isNewline) }
+    }
+    
+    private func removingComments(from line: String) -> String {
+        var line = line
+        let commentPattern = Regex {
+            Capture {
+                OneOrMore {
+                    "//"
+                }
+                ZeroOrMore(.anyNonNewline)
+            }
+        }
+        
+        if let match = line.firstMatch(of: commentPattern) {
+            line.removeSubrange(match.range)
+        }
+        
+        return line
     }
 }
 
