@@ -23,7 +23,7 @@ struct Hasm: ParsableCommand {
                 return partialResult + "\n" + bin
             }
         
-        print(binary)
-        // TODO: Output to a file
+        let outputFile = try OutputFile(path: outputFilePath)
+        try outputFile.write(text: binary)
     }
 }

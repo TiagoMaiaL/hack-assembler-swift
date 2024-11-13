@@ -68,3 +68,41 @@ extension InputFile {
         case notAscii
     }
 }
+
+struct OutputFile {
+    let url: URL
+    
+    init(path: String) throws {
+        let fileManager = FileManager.default
+        
+        guard let pathURL = URL(
+            string: "file://\(fileManager.currentDirectoryPath)/\(path)"
+        ) else {
+            throw Error.invalidPath
+        }
+        
+        self.url = pathURL
+        
+        guard fileManager.createFile(
+            atPath: path,
+            contents: nil
+        ) else {
+            throw Error.creationFailed
+        }
+    }
+    
+    func write(text: String) throws {
+        try text.write(
+            to: url,
+            atomically: false,
+            encoding: .ascii
+        )
+    }
+}
+
+extension OutputFile {
+    enum Error: Swift.Error {
+        case invalidPath
+        case creationFailed
+    }
+}
