@@ -72,7 +72,7 @@ extension Instructions.Computation: BinaryRepresentable {
         case "D": return "001100"
         case "A", "M": return "110000"
         case "!D": return "001101"
-        case "!A", "!M": return "110011"
+        case "!A", "!M": return "110001"
         case "-D": return "001111"
         case "-A", "-M": return "110011"
         case "D+1": return "011111"

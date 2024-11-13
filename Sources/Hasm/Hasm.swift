@@ -1,6 +1,3 @@
-
-// TODO: Add the translator module
-
 import ArgumentParser
 
 @main
@@ -20,7 +17,7 @@ struct Hasm: ParsableCommand {
             .compactMap { $0 as? BinaryRepresentable }
             .map { try $0.binaryRepresentation }
             .reduce("") { partialResult, bin in
-                return partialResult + "\n" + bin
+                partialResult + (partialResult.isEmpty ? "" : "\n") + bin
             }
         
         let outputFile = try OutputFile(path: outputFilePath)

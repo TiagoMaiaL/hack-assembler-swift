@@ -34,13 +34,20 @@ struct InputFile {
         return sourceCode
             .split(separator: .newlineSequence)
             .map(String.init)
-            .map(removingWhitespaces)
             .map(removingComments)
+            .map(removingWhitespaces)
             .filter { !$0.isEmpty }
     }
     
     private func removingWhitespaces(from line: String) -> String {
-        line.filter { !($0.isWhitespace && $0.isNewline) }
+        let cleanLine = line.filter {
+            $0.isNumber ||
+            $0.isLetter ||
+            $0.isPunctuation ||
+            $0.isMathSymbol ||
+            $0.isCurrencySymbol
+        }
+        return cleanLine
     }
     
     private func removingComments(from line: String) -> String {
