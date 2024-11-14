@@ -68,15 +68,15 @@ struct BinaryTests {
         var labelTable = LabelTable()
         
         let address1 = Instructions.Address(val: "var1")
-        #expect(try address1.binaryRepresentation(using: &labelTable) == "0000000000000000")
+        #expect(try address1.binaryRepresentation(using: &labelTable) == "0000000000010000")
         
         let address2 = Instructions.Address(val: "var2")
-        #expect(try address2.binaryRepresentation(using: &labelTable) == "0000000000000001")
+        #expect(try address2.binaryRepresentation(using: &labelTable) == "0000000000010001")
         
         let address3 = Instructions.Address(val: "var3")
-        #expect(try address3.binaryRepresentation(using: &labelTable) == "0000000000000010")
+        #expect(try address3.binaryRepresentation(using: &labelTable) == "0000000000010010")
         
         let address4 = Instructions.Address(val: "var4")
-        #expect(try address4.binaryRepresentation(using: &labelTable) == "0000000000000011")
+        #expect(try address4.binaryRepresentation(using: &labelTable) == "0000000000010011")
     }
 }

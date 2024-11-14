@@ -10,7 +10,7 @@ struct LabelTable {
     typealias Address = Int
     private var addressMap: [Label: Address] = [:]
     
-    private var nextAvailableAddress = 0
+    private var nextAvailableAddress = 16
     
     mutating func associate(symbol: Label, to address: Address) {
         guard address >= 0 else {
@@ -20,7 +20,7 @@ struct LabelTable {
     }
     
     mutating func associate(variable: Label) {
-        guard PredefinedVariables(rawValue: variable.lowercased()) == nil else {
+        guard PredefinedVariable(rawValue: variable.lowercased()) == nil else {
             return
         }
         
@@ -33,7 +33,7 @@ struct LabelTable {
     }
     
     func address(for label: Label) -> Address? {
-        return if let predefinedVar = PredefinedVariables(rawValue: label.lowercased()) {
+        return if let predefinedVar = PredefinedVariable(rawValue: label.lowercased()) {
             predefinedVar.address
         } else {
             addressMap[label]
@@ -42,7 +42,7 @@ struct LabelTable {
 }
 
 private extension LabelTable {
-    enum PredefinedVariables: String {
+    enum PredefinedVariable: String {
         case sp
         case lcl
         case arg

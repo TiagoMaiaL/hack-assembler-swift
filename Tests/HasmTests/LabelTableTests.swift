@@ -29,7 +29,7 @@ struct SymbolTableTests {
     @Test
     mutating func testAssociatingVariable() {
         labelTable.associate(variable: "someVariable")
-        #expect(labelTable.address(for: "someVariable") == 0)
+        #expect(labelTable.address(for: "someVariable") == 16)
     }
     
     @Test
@@ -37,10 +37,10 @@ struct SymbolTableTests {
         let variable = "var"
         
         labelTable.associate(variable: variable)
-        #expect(labelTable.address(for: variable) == 0)
+        #expect(labelTable.address(for: variable) == 16)
         
         labelTable.associate(variable: variable)
-        #expect(labelTable.address(for: variable) == 0)
+        #expect(labelTable.address(for: variable) == 16)
     }
     
     @Test
@@ -52,7 +52,7 @@ struct SymbolTableTests {
     mutating func testAssociatingMultipleVariables() {
         for index in 0...50 {
             let variable = "var\(index)"
-            let expectedAddress = index
+            let expectedAddress = 16 + index
             
             labelTable.associate(variable: variable)
             #expect(labelTable.address(for: variable) == expectedAddress)

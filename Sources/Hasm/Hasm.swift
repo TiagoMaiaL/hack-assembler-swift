@@ -9,12 +9,11 @@ struct Hasm: ParsableCommand {
         let inputFile = try InputFile(path: asmFilePath)
         let parser = Parser()
         var labelTable = LabelTable()
-        var lineNumber = 0
+        var lineNumber = -1
 
         let instructions = try inputFile.lines()
             .map(parser.parse)
 
-        
         instructions.forEach { instruction in
             switch instruction {
             case _ as Instructions.Address, _ as Instructions.Computation:
