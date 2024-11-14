@@ -6,19 +6,17 @@
 //
 
 protocol BinaryRepresentable: Instruction {
-    var binaryRepresentation: String { get throws }
+    func binaryRepresentation(using labelTable: inout LabelTable) throws -> String
 }
 
 extension Instructions.Address: BinaryRepresentable {
-    var binaryRepresentation: String {
-        get throws {
-            // TODO: if this is a name, get its corresponding address.
-            guard let memoryAddress = Int(val) else {
-                throw BinaryTranslationError.invalid(address: val)
-            }
-            
-            return try computeBinary(of: memoryAddress)
+    func binaryRepresentation(using labelTable: inout LabelTable) throws -> String {
+        // TODO: if this is a name, get its corresponding address.
+        guard let memoryAddress = Int(val) else {
+            throw BinaryTranslationError.invalid(address: val)
         }
+        
+        return try computeBinary(of: memoryAddress)
     }
     
     private func computeBinary(of number: Int) throws -> String {
@@ -52,16 +50,14 @@ extension Instructions.Address: BinaryRepresentable {
 }
 
 extension Instructions.Computation: BinaryRepresentable {
-    var binaryRepresentation: String {
-        get throws {
-            let header = "111"
-            let a = function.contains("M") ? "1" : "0"
-            let comp = try compField(from: function)
-            let dest = try destField(from: destination)
-            let jump = try jumpField(from: jump)
-            
-            return header + a + comp + dest + jump
-        }
+    func binaryRepresentation(using labelTable: inout LabelTable) throws -> String {
+        let header = "111"
+        let a = function.contains("M") ? "1" : "0"
+        let comp = try compField(from: function)
+        let dest = try destField(from: destination)
+        let jump = try jumpField(from: jump)
+        
+        return header + a + comp + dest + jump
     }
     
     private func compField(from function: String) throws -> String {

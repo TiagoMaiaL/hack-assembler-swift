@@ -9,6 +9,8 @@
 import Testing
 
 struct BinaryTests {
+    var labelTable = LabelTable()
+    
     @Test(
         arguments: [
             (val: "0", bin: "0000000000000000"),
@@ -27,11 +29,11 @@ struct BinaryTests {
             (val: "7000", bin: "0001101101011000"),
         ]
     )
-    func testBinaryOfRegularAddressInstructions(
+    mutating func testBinaryOfRegularAddressInstructions(
         testArguments: (val: String, bin: String)
     ) throws {
         let aInstruction = Instructions.Address(val: testArguments.val)
-        #expect(try aInstruction.binaryRepresentation == testArguments.bin)
+        #expect(try aInstruction.binaryRepresentation(using: &labelTable) == testArguments.bin)
     }
     
     @Test(
@@ -40,10 +42,10 @@ struct BinaryTests {
             "    \t."
         ]
     )
-    func testBinaryTranslationOfAddressInstructionGeneratesError(val: String) {
+    mutating func testBinaryTranslationOfAddressInstructionGeneratesError(val: String) {
         let aInstruction = Instructions.Address(val: val)
         #expect(throws: BinaryTranslationError.self) {
-            try aInstruction.binaryRepresentation
+            try aInstruction.binaryRepresentation(using: &labelTable)
         }
     }
     
@@ -57,7 +59,9 @@ struct BinaryTests {
             (Computation(function: "A+1", destination: nil, jump: "JMP"), "1110110111000111"),
         ]
     )
-    func testBinaryTranslationOfComputationInstructions(argument: CompTestArgument) throws {
-        #expect(try argument.comp.binaryRepresentation == argument.bin)
+    mutating func testBinaryTranslationOfComputationInstructions(argument: CompTestArgument) throws {
+        #expect(try argument.comp.binaryRepresentation(using: &labelTable) == argument.bin)
     }
+    
+    // TODO: Test var substitution.
 }
