@@ -95,7 +95,7 @@ struct Parser {
 extension Parser {
     private func validate(addressOrVariable: String) throws {
         guard addressOrVariable.isValidAddress ||
-              addressOrVariable.isValidSymbol else {
+              addressOrVariable.isValidLabel else {
             throw Error.invalid(address: addressOrVariable)
         }
     }
@@ -161,25 +161,9 @@ extension Parser {
     }
     
     private func validate(symbol: String) throws {
-        guard symbol.isValidSymbol else {
+        guard symbol.isValidLabel else {
             throw Error.invalid(symbol: symbol)
         }
-    }
-}
-
-private extension String {
-    var isValidSymbol: Bool {
-        (first?.isLetter ?? false) && allSatisfy { char in
-            return char.isNumber ||
-                   char.isLetter ||
-                   char == "."   ||
-                   char == "$"   ||
-                   char == "_"
-        }
-    }
-    
-    var isValidAddress: Bool {
-        allSatisfy(\.isNumber)
     }
 }
 

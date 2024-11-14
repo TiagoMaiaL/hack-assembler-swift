@@ -63,5 +63,20 @@ struct BinaryTests {
         #expect(try argument.comp.binaryRepresentation(using: &labelTable) == argument.bin)
     }
     
-    // TODO: Test var substitution.
+    @Test
+    mutating func testBinaryTranslationOfAddressesWithVariables() throws {
+        var labelTable = LabelTable()
+        
+        let address1 = Instructions.Address(val: "var1")
+        #expect(try address1.binaryRepresentation(using: &labelTable) == "0000000000000000")
+        
+        let address2 = Instructions.Address(val: "var2")
+        #expect(try address2.binaryRepresentation(using: &labelTable) == "0000000000000001")
+        
+        let address3 = Instructions.Address(val: "var3")
+        #expect(try address3.binaryRepresentation(using: &labelTable) == "0000000000000010")
+        
+        let address4 = Instructions.Address(val: "var4")
+        #expect(try address4.binaryRepresentation(using: &labelTable) == "0000000000000011")
+    }
 }

@@ -11,9 +11,23 @@ protocol BinaryRepresentable: Instruction {
 
 extension Instructions.Address: BinaryRepresentable {
     func binaryRepresentation(using labelTable: inout LabelTable) throws -> String {
-        // TODO: if this is a name, get its corresponding address.
-        guard let memoryAddress = Int(val) else {
-            throw BinaryTranslationError.invalid(address: val)
+        let memoryAddress: Int
+        
+        if val.isValidLabel {
+            labelTable.associate(variable: val)
+            
+            guard let address = labelTable.address(for: val) else {
+                preconditionFailure("A valid address should be returned here.")
+            }
+            
+            memoryAddress = address
+            
+        } else {
+            guard let address = Int(val) else {
+                throw BinaryTranslationError.invalid(address: val)
+            }
+            
+            memoryAddress = address
         }
         
         return try computeBinary(of: memoryAddress)
